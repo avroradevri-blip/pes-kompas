@@ -349,6 +349,63 @@ def close_request(rid):
     return redirect(url_for("mine", nick=nick, closed=1))
 
 
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD") or "peskompas"
+
+
+def admin_logged_in():
+    return bool(session.get("admin"))
+
+
+@app.get("/admin")
+def admin_home():
+    if not admin_logged_in():
+        return render_template("admin/login.html", error="")
+    needle = (request.args.get("number") or "").strip()
+    missing = False
+    if needle:
+        if needle.isdigit() and load_request(int(needle)):
+            return redirect(url_for("admin_thread", rid=int(needle)))
+        missing = True
+    rows = query(
+        """
+        SELECT
+            r.id, r.dog_name, r.owner_name, r.owner_nick, r.district, r.status,
+            r.walk_date, r.walk_time,
+            (SELECT COUNT(*) FROM messages m WHERE m.request_id = r.id) AS msgs
+        FROM requests AS r
+        ORDER BY r.id DESC
+        """
+    )
+    return render_template("admin/home.html", rows=rows, number=needle, missing=missing)
+
+
+@app.post("/admin/login")
+def admin_login():
+    given = request.form.get("password") or ""
+    if given == ADMIN_PASSWORD:
+        session["admin"] = True
+        session.permanent = True
+        return redirect(url_for("admin_home"))
+    return render_template("admin/login.html", error="Неверный пароль.")
+
+
+@app.post("/admin/logout")
+def admin_logout():
+    session.pop("admin", None)
+    return redirect(url_for("admin_home"))
+
+
+@app.get("/admin/chat/<int:rid>")
+def admin_thread(rid):
+    if not admin_logged_in():
+        return redirect(url_for("admin_home"))
+    item = load_request(rid)
+    if not item:
+        return redirect(url_for("admin_home", number=rid))
+    messages = load_messages(rid)
+    return render_template("admin/thread.html", item=item, messages=messages)
+
+
 @app.errorhandler(404)
 def not_found(_err):
     return render_template("404.html"), 404

@@ -1,27 +1,14 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Вход — переписки</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/admin.css">
-</head>
-<body>
-  <main class="box">
-    <p class="kicker">Пёс-Компас</p>
-    <h1>Переписки</h1>
-    <p class="lead">Вход для просмотра чатов по номеру заявки.</p>
-    <form method="post" action="/login">
-      <label>
-        <span>Пароль</span>
-        <input type="password" name="password" autofocus>
-      </label>
-      {% if error %}<p class="err">{{ error }}</p>{% endif %}
-      <button type="submit">Войти</button>
-    </form>
-  </main>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Вход — Пёс-Компас{% endblock %}
+{% block content %}
+<h1 class="page">Переписки</h1>
+<p class="lead">Вход для просмотра чатов. Сюда можно зайти с телефона и с компьютера.</p>
+<form method="post" action="{{ url_for('admin_login') }}" class="composer">
+  <label class="field">
+    <span>Пароль</span>
+    <input type="password" name="password" autofocus>
+  </label>
+  {% if error %}<p class="note bad">{{ error }}</p>{% endif %}
+  <button type="submit">Войти</button>
+</form>
+{% endblock %}
