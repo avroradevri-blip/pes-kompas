@@ -27,6 +27,26 @@ TOKEN = os.environ.get("BOT_TOKEN", "").strip()
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET", "pes-kompas-local")
 
+
+class KeepPath:
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        path = environ.get("PATH_INFO") or "/"
+        for prefix in ("/api/index", "/api"):
+            if path == prefix or path == prefix + "/":
+                path = "/"
+                break
+            if path.startswith(prefix + "/"):
+                path = path[len(prefix):] or "/"
+                break
+        environ["PATH_INFO"] = path or "/"
+        return self.wsgi_app(environ, start_response)
+
+
+app.wsgi_app = KeepPath(app.wsgi_app)
+
 MONTHS = (
     "января февраля марта апреля мая июня июля августа "
     "сентября октября ноября декабря"
