@@ -15,6 +15,7 @@ class KeepPath:
     def __call__(self, environ, start_response):
         path = environ.get("PATH_INFO") or "/"
         script = environ.get("SCRIPT_NAME") or ""
+        environ["VERCEL_ORIGINAL_PATH"] = path
         for prefix in ("/api/index", "/api"):
             if path == prefix:
                 script += prefix
