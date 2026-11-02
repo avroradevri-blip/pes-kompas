@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Чат №{{ item.id }} — Пёс-Компас{% endblock %}
+{% block topnav %}<a class="topnav" href="{{ url_for('listing') }}">К списку</a>{% endblock %}
+{% block content %}
+<p class="reqno">Заявка №{{ item.id }}</p>
+<h1 class="page">{{ item.dog_name }}</h1>
+<p class="lead">
+  <span class="district">{{ item.district }}</span>
+  · {{ item.walk_date|rudate }}
+  · <span class="district">{{ item.walk_time }}</span>
+  · {{ item.owner_name }} {{ item.owner_nick }}
+</p>
+
+<div class="thread">
+  {% for message in messages %}
+  <article class="bubble{% if me and message.author_nick|lower == me|lower %} mine{% endif %}">
+    <header>
+      <b>{{ message.author_name }}</b>
+      <time>{{ message.created_at }}</time>
+    </header>
+    <p>{{ message.body }}</p>
+  </article>
+  {% else %}
+  <p class="note">В этом чате пока пусто. Напишите первым.</p>
+  {% endfor %}
+</div>
+
+{% if item.status != 'open' %}
+<p class="note">Заявка закрыта. Написать уже нельзя.</p>
+{% else %}
+<form method="post" class="composer" novalidate>
+  {% if not me %}
+  <div class="grid">
+    <label class="field">
+      <span>Имя</span>
+      <input type="text" name="name" value="{{ name }}">
+      {% if errors.name %}<em class="err">{{ errors.name }}</em>{% endif %}
+    </label>
+    <label class="field">
+      <span>Ник Telegram</span>
+      <input type="text" name="nick" value="">
+      {% if errors.nick %}<em class="err">{{ errors.nick }}</em>{% endif %}
+    </label>
+  </div>
+  {% endif %}
+  <div class="composer-box">
+    <label class="field">
+      <span class="visually-hidden">Сообщение</span>
+      <textarea name="text" rows="2" placeholder="Написать сообщение…"></textarea>
+      {% if errors.text %}<em class="err">{{ errors.text }}</em>{% endif %}
+    </label>
+    <button type="submit" aria-label="Отправить">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2 8h12M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Отправить
+    </button>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

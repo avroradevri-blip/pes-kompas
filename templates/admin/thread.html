@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Заявка №{{ item.id }} — Пёс-Компас{% endblock %}
+{% block topnav %}<a class="topnav" href="{{ url_for('admin_home') }}">Все заявки</a>{% endblock %}
+{% block content %}
+<p class="reqno">Заявка №{{ item.id }}</p>
+<h1 class="page">{{ item.dog_name }}</h1>
+<p class="lead">
+  <span class="district">{{ item.district }}</span>
+  · {{ item.walk_date|rudate }}
+  · <span class="district">{{ item.walk_time }}</span>
+  · {{ item.owner_name }} {{ item.owner_nick }}
+</p>
+<div class="thread">
+  {% for message in messages %}
+  <article class="bubble">
+    <header>
+      <b>{{ message.author_name }}</b>
+      <time>{{ message.created_at }}</time>
+    </header>
+    <p>{{ message.body }}</p>
+  </article>
+  {% else %}
+  <p class="note">Сообщений нет.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Заявки — Пёс-Компас{% endblock %}
+{% block topnav %}<a class="topnav" href="{{ url_for('index') }}">На главную</a>{% endblock %}
+{% block content %}
+<h1 class="page">Открытые заявки</h1>
+<p class="lead">В поле «Район» можно вписать часть названия. Пустое поле показывает все открытые.</p>
+
+{% if added %}
+<p class="note">Заявка №{{ added }} сохранена. Она в списке ниже, чат открывается по этому номеру.</p>
+{% endif %}
+
+<form class="filter" method="get" action="{{ url_for('listing') }}">
+  <label class="field">
+    <span>Район</span>
+    <input type="text" name="district" value="{{ district }}">
+  </label>
+  <button type="submit">Показать</button>
+  {% if district %}
+  <a class="textlink" href="{{ url_for('listing') }}">все районы</a>
+  {% endif %}
+</form>
+
+{% if rows %}
+<div class="tickets">
+  {% for row in rows %}
+  <article class="ticket">
+    <div class="when">
+      <b>{{ row.walk_time }}</b>
+      <span>{{ row.walk_date|rudate }}</span>
+    </div>
+    <div>
+      <p class="meta">
+        <span class="reqno">№ {{ row.id }}</span>
+        <span class="district">{{ row.district }}</span>
+        <i class="badge">открыта</i>
+      </p>
+      <h2>{{ row.dog_name }}</h2>
+      <p class="breed">{{ row.breed }}</p>
+      {% if row.comment %}<p class="comment">{{ row.comment }}</p>{% endif %}
+      <p class="who">{{ row.owner_name }} · {{ row.owner_nick }}</p>
+    </div>
+    <a class="btn" href="{{ url_for('chat', rid=row.id) }}">Откликнуться</a>
+  </article>
+  {% endfor %}
+</div>
+{% elif district %}
+<p class="note">В этом районе открытых заявок нет.</p>
+{% else %}
+<p class="note">Пока ни одной открытой заявки. Если вы хозяин, оставьте первую.</p>
+{% endif %}
+{% endblock %}

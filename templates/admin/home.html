@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Переписки — Пёс-Компас{% endblock %}
+{% block topnav %}
+<form method="post" action="{{ url_for('admin_logout') }}"><button class="ghost" type="submit">Выйти</button></form>
+{% endblock %}
+{% block content %}
+<h1 class="page">Переписки</h1>
+<p class="lead">Введите номер заявки или откройте чат из списка.</p>
+<form class="filter" method="get" action="{{ url_for('admin_home') }}">
+  <label class="field">
+    <span>Номер заявки</span>
+    <input type="text" name="number" value="{{ number }}" inputmode="numeric" placeholder="12">
+  </label>
+  <button type="submit">Открыть</button>
+</form>
+{% if missing %}<p class="note bad">Заявки с таким номером нет.</p>{% endif %}
+{% if rows %}
+<div class="tickets">
+  {% for row in rows %}
+  <article class="ticket">
+    <div class="when">
+      <b>№{{ row.id }}</b>
+      <span>{{ row.walk_date|rudate }}</span>
+    </div>
+    <div>
+      <p class="meta">
+        <span class="district">{{ row.district }}</span>
+        <i class="badge{% if row.status != 'open' %} closed{% endif %}">{{ 'открыта' if row.status == 'open' else 'закрыта' }}</i>
+      </p>
+      <h2>{{ row.dog_name }}</h2>
+      <p class="who">{{ row.owner_name }} · {{ row.owner_nick }} · {{ row.msgs }} сообщ.</p>
+    </div>
+    <a class="btn" href="{{ url_for('admin_thread', rid=row.id) }}">Читать</a>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="note">Заявок пока нет.</p>
+{% endif %}
+{% endblock %}

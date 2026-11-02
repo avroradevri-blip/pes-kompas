@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Мои заявки — Пёс-Компас{% endblock %}
+{% block topnav %}<a class="topnav" href="{{ url_for('index') }}">На главную</a>{% endblock %}
+{% block content %}
+<h1 class="page">Мои заявки</h1>
+<p class="lead">Введите ник из заявки. Откроется чат и число непрочитанных сообщений.</p>
+
+<form class="filter" method="get" action="{{ url_for('mine') }}">
+  <label class="field">
+    <span>Ник Telegram</span>
+    <input type="text" name="nick" value="{{ nick }}">
+  </label>
+  <button type="submit">Показать</button>
+</form>
+{% if error %}<p class="note bad">{{ error }}</p>{% endif %}
+{% if nick and unread %}<p class="note">У вас {{ unread }} непрочитанных.</p>{% endif %}
+{% if closed %}<p class="note">Заявка закрыта. В общем списке её больше нет.</p>{% endif %}
+
+{% if searched and not error %}
+  {% if rows %}
+  <div class="tickets">
+    {% for row in rows %}
+    <article class="ticket stack">
+      <div class="when">
+        <b>{{ row.walk_time }}</b>
+        <span>{{ row.walk_date|rudate }}</span>
+      </div>
+      <div>
+        <p class="meta">
+          <span class="reqno">№ {{ row.id }}</span>
+          <span class="district">{{ row.district }}</span>
+          <i class="badge{% if row.status != 'open' %} closed{% endif %}">{{ 'открыта' if row.status == 'open' else 'закрыта' }}</i>
+        </p>
+        <h2>{{ row.dog_name }}</h2>
+        <p class="breed">{{ row.breed }}</p>
+        {% if row.comment %}<p class="comment">{{ row.comment }}</p>{% endif %}
+        <p class="comment">Сообщений: {{ row.msg_count }}{% if row.unread %} · непрочитанных {{ row.unread }}{% endif %}</p>
+        <p class="actions"><a class="btn" href="{{ url_for('chat', rid=row.id) }}">Открыть чат</a></p>
+        {% if row.status == 'open' %}
+        <form method="post" action="{{ url_for('close_request', rid=row.id) }}" class="closer">
+          <input type="hidden" name="nick" value="{{ nick }}">
+          <button type="submit" class="ghost">Закрыть</button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="note">Заявок с таким ником нет. Ник должен совпадать с тем, что вы указали в форме.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

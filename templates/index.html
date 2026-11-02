@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block bodyclass %}home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="kicker">кому выгулять собаку</p>
+    <h1>Пёс-<br>Компас</h1>
+    <p class="lead">Хозяин пишет район, дату и время. Кто готов погулять, нажимает «Откликнуться» и попадает в чат этой заявки.</p>
+  </div>
+  <div class="compass" aria-hidden="true">
+    <svg viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="96" fill="#F7F5F2" stroke="#E8E4DF" stroke-width="3"/>
+      <circle cx="100" cy="100" r="62" fill="none" stroke="#E8E4DF" stroke-width="1.5"/>
+      <g stroke="#E8E4DF" stroke-width="2">
+        <line x1="100" y1="180" x2="100" y2="194"/>
+        <line x1="6" y1="100" x2="20" y2="100"/>
+        <line x1="180" y1="100" x2="194" y2="100"/>
+        <line x1="33" y1="33" x2="44" y2="44"/>
+        <line x1="156" y1="156" x2="167" y2="167"/>
+        <line x1="167" y1="33" x2="156" y2="44"/>
+        <line x1="44" y1="156" x2="33" y2="167"/>
+      </g>
+      <path d="M100 8 L109 36 L100 28 L91 36 Z" fill="#E07A5F"/>
+    </svg>
+    <div class="compass-mid">
+      <strong>{{ count }}</strong>
+      <span>{{ caption }}</span>
+    </div>
+  </div>
+</section>
+
+<nav class="routes" aria-label="Разделы">
+  <a class="route" href="{{ url_for('new_request') }}">
+    <span class="num">01</span>
+    <span class="route-text">
+      <b>Оставить заявку</b>
+      <small>кличка, район, когда гулять</small>
+    </span>
+    <span class="go">дальше</span>
+  </a>
+  <a class="route" href="{{ url_for('listing') }}">
+    <span class="num">02</span>
+    <span class="route-text">
+      <b>Смотреть заявки</b>
+      <small>открытые прогулки и фильтр по району</small>
+    </span>
+    <span class="go">дальше</span>
+  </a>
+  <a class="route" href="{{ url_for('mine') }}">
+    <span class="num">03</span>
+    <span class="route-text">
+      <b>Мои заявки</b>
+      <small>отклики ищутся по вашему нику</small>
+    </span>
+    <span class="go">дальше</span>
+  </a>
+</nav>
+{% endblock %}
