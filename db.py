@@ -7,7 +7,10 @@ from dotenv import load_dotenv
 BASE = Path(__file__).resolve().parent
 load_dotenv(BASE / ".env")
 
-DB_PATH = BASE / "data" / "kompas.sqlite3"
+if os.environ.get("VERCEL"):
+    DB_PATH = Path("/tmp/kompas.sqlite3")
+else:
+    DB_PATH = BASE / "data" / "kompas.sqlite3"
 
 
 def norm_nick(value):
