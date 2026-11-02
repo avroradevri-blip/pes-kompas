@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Переписки — Пёс-Компас</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+  <main class="desk">
+    <header class="top">
+      <div>
+        <p class="kicker">Пёс-Компас</p>
+        <h1>Переписки</h1>
+      </div>
+      <form method="post" action="/logout"><button class="ghost" type="submit">Выйти</button></form>
+    </header>
+    <form class="search" method="get" action="/">
+      <label>
+        <span>Номер заявки</span>
+        <input type="text" name="number" value="{{ number }}" inputmode="numeric" placeholder="12">
+      </label>
+      <button type="submit">Открыть</button>
+    </form>
+    {% if missing %}<p class="err">Заявки с таким номером нет.</p>{% endif %}
+    <table>
+      <thead>
+        <tr><th>№</th><th>Собака</th><th>Хозяин</th><th>Район</th><th>Чат</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.id }}</td>
+          <td>{{ row.dog_name }}</td>
+          <td>{{ row.owner_name }} {{ row.owner_nick }}</td>
+          <td>{{ row.district }}</td>
+          <td>{{ row.msgs }}{% if row.last_at %} · {{ row.last_at }}{% endif %}</td>
+          <td><a href="/chat/{{ row.id }}">читать</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">Заявок пока нет.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

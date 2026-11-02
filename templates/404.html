@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Нет такой страницы — Пёс-Компас{% endblock %}
+{% block content %}
+<h1 class="page">Нет такой страницы</h1>
+<p class="lead">Заявка не найдена или ссылка собрана с ошибкой.</p>
+<p><a class="btn" href="{{ url_for('index') }}">На главную</a></p>
+{% endblock %}

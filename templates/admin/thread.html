@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Заявка №{{ item.id }} — переписка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+  <main class="desk">
+    <p class="back"><a href="/">все заявки</a></p>
+    <p class="kicker">Заявка №{{ item.id }}</p>
+    <h1>{{ item.dog_name }}</h1>
+    <p class="lead">{{ item.district }} · {{ item.walk_date }} · {{ item.walk_time }} · {{ item.owner_name }} {{ item.owner_nick }} · {{ 'открыта' if item.status == 'open' else 'закрыта' }}</p>
+    {% if item.comment %}<p class="lead">{{ item.comment }}</p>{% endif %}
+    <div class="thread">
+      {% for message in messages %}
+      <article class="bubble">
+        <header>{{ message.author_name }} · {{ message.author_nick }} <time>{{ message.created_at }}</time></header>
+        <p>{{ message.body }}</p>
+      </article>
+      {% else %}
+      <p class="lead">Сообщений нет.</p>
+      {% endfor %}
+    </div>
+  </main>
+</body>
+</html>

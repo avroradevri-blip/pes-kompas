@@ -1,0 +1,11 @@
+{% macro field(name, label, value='', error='', type='text', wide=False, area=False) %}
+<label class="field{% if wide %} wide{% endif %}">
+  <span>{{ label }}</span>
+  {% if area %}
+    <textarea name="{{ name }}" rows="4">{{ value }}</textarea>
+  {% else %}
+    <input type="{{ type }}" name="{{ name }}" value="{{ value }}">
+  {% endif %}
+  {% if error %}<em class="err">{{ error }}</em>{% endif %}
+</label>
+{% endmacro %}

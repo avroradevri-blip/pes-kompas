@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Пёс-Компас{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4">
+</head>
+<body class="{% block bodyclass %}{% endblock %}">
+  <div class="wrap">
+    <article class="sheet">
+      <div class="pad">
+        <header class="topline">
+          <a class="logo" href="{{ url_for('index') }}">
+            <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+              <circle cx="11" cy="11" r="9" fill="none" stroke="#E07A5F" stroke-width="1.6"/>
+              <path d="M11 3.2 L12.4 8.2 L11 7.2 L9.6 8.2 Z" fill="#E07A5F"/>
+            </svg>
+            Пёс-Компас
+          </a>
+          {% block topnav %}{% endblock %}
+        </header>
+        {% block content %}{% endblock %}
+        <footer class="foot">Когда вам пишут, бот присылает число уведомлений.</footer>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "fields.html" import field %}
+{% block title %}Новая заявка — Пёс-Компас{% endblock %}
+{% block topnav %}<a class="topnav" href="{{ url_for('index') }}">На главную</a>{% endblock %}
+{% block content %}
+<h1 class="page">Новая заявка</h1>
+<p class="lead">Пишите так, чтобы вам могли ответить в Telegram. Ник можно с @ и без: сайт сам приведёт его к одному виду.</p>
+<form method="post" class="grid" novalidate>
+  {{ field("owner_name", "Имя", data.owner_name, errors.owner_name) }}
+  {{ field("owner_nick", "Ник Telegram", data.owner_nick, errors.owner_nick) }}
+  {{ field("dog_name", "Кличка", data.dog_name, errors.dog_name) }}
+  {{ field("breed", "Порода", data.breed, errors.breed) }}
+  {{ field("district", "Район", data.district, errors.district, wide=True) }}
+  {{ field("walk_date", "Дата", data.walk_date, errors.walk_date, type="date") }}
+  {{ field("walk_time", "Время", data.walk_time, errors.walk_time, type="time") }}
+  {{ field("comment", "Комментарий, можно не заполнять", data.comment, "", wide=True, area=True) }}
+  <div class="wide actions">
+    <button type="submit">Сохранить заявку</button>
+  </div>
+</form>
+{% endblock %}
